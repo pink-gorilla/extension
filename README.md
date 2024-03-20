@@ -1,4 +1,5 @@
-# extension
+# extension [![GitHub Actions status |pink-gorilla/extension](https://github.com/pink-gorilla/extension/workflows/CI/badge.svg)](https://github.com/pink-gorilla/extension/actions?workflow=CI)[![Clojars Project](https://img.shields.io/clojars/v/org.pinkgorilla/extension.svg)](https://clojars.org/org.pinkgorilla/extension)
+
 
 A extension manager
 
