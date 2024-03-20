@@ -9,12 +9,12 @@ Helps in discovery of dynamic services and service-extensions.
 
 To start the extension manager:
 ```
-(def exts (extension.extension/discover))
+(def exts (extension/discover))
 ```
 
 This is equivalent to:
 ```
-(def exts (extension.extension/discover {:resource-dir "ext"
+(def exts (extension/discover {:resource-dir "ext"
                                :output-path "target"
                                :disabled-extensions []}))
 ```
@@ -23,7 +23,7 @@ This is equivalent to:
 # Use Extension manager to configure an extension
 
 ```
-(get-extensions-for exts :quanta/template concat [] []])
+(extension/get-extensions-for exts :quanta/template concat [] []])
 ```
 
 

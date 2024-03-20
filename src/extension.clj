@@ -1,9 +1,8 @@
-(ns extension.discover
+(ns extension
   (:require
    [clojure.edn :as edn]
    [resauce.core :as rs]
-   [modular.writer :refer [write-status write-target]]
-   ))
+   [modular.writer :refer [write-status write-target]]))
 
 (defn add-extension [ext-res-name]
   (->> ext-res-name
@@ -17,24 +16,23 @@
   ([]
    (discover {}))
   ([{:keys [resource-dir output-path disabled-extensions]
-    :or {resource-dir "ext"
-         output-path "target/"
-         disabled-extensions #{}}}]
-  (let [ext-res-names  (rs/resource-dir resource-dir)
-        ext-list (map add-extension ext-res-names)]
-    {:extensions ext-list 
-     :extension-dict (into {}
-                           (map (fn [ext]
-                                  [(:name ext) ext]) ext-list))
-    :output-path output-path
-    :extensions-disabled []
-    })))
+     :or {resource-dir "ext"
+          output-path "target/"
+          disabled-extensions #{}}}]
+   (let [ext-res-names  (rs/resource-dir resource-dir)
+         ext-list (map add-extension ext-res-names)]
+     {:extensions ext-list
+      :extension-dict (into {}
+                            (map (fn [ext]
+                                   [(:name ext) ext]) ext-list))
+      :output-path output-path
+      :extensions-disabled []})))
 
 (defn- write-service [state service-kw service-config]
-  (write-target (name service-kw) service-config ))
+  (write-target (name service-kw) service-config))
 
 
-(defn get-extensions-for 
+(defn get-extensions-for
   "(get-extensions exts :cljs)
    {“Ui-vega” [ui.vega/raw ui.vega.arrow]
     “Ui-repl” [promesa.core re-frame.core]
@@ -42,10 +40,9 @@
   [{:keys [output-path extensions] :as state} service-kw reducer-fn start-value nil-value]
   (let [get-extension-key (fn [ext]
                             (or (service-kw ext) nil-value))
-        service-config (reduce reducer-fn start-value (map get-extension-key extensions)) 
-        ]
-      (write-service state service-kw service-config)
-      service-config))
+        service-config (reduce reducer-fn start-value (map get-extension-key extensions))]
+    (write-service state service-kw service-config)
+    service-config))
 
 
 
