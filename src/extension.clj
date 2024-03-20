@@ -10,6 +10,15 @@
        edn/read-string
        #_(ext-lazy-override goldly-config)))
 
+(defn discover-resauce [resource-dir]
+  (let [ext-res-names  (rs/resource-dir resource-dir)]
+     (map add-extension ext-res-names)))
+
+(defn extension-dict [ext-list]
+  (into {}
+        (map (fn [ext]
+               [(:name ext) ext]) ext-list)))
+
 (defn discover
   "Returns the discovered extensions for the purpose of using it in extension start. 
    Consider it a start-fn for an extension db service."
@@ -19,12 +28,9 @@
      :or {resource-dir "ext"
           output-path "target/"
           disabled-extensions #{}}}]
-   (let [ext-res-names  (rs/resource-dir resource-dir)
-         ext-list (map add-extension ext-res-names)]
+   (let [ext-list (discover-resauce resource-dir)]
      {:extensions ext-list
-      :extension-dict (into {}
-                            (map (fn [ext]
-                                   [(:name ext) ext]) ext-list))
+      :extension-dict (extension-dict ext-list)
       :output-path output-path
       :extensions-disabled []})))
 
@@ -43,9 +49,6 @@
         service-config (reduce reducer-fn start-value (map get-extension-key extensions))]
     (write-service state service-kw service-config)
     service-config))
-
-
-
 
 (defn get-deps-from-classpath []
   (let [deps
