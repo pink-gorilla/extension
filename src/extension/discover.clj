@@ -14,7 +14,9 @@
 (defn discover
   "Returns the discovered extensions for the purpose of using it in extension start. 
    Consider it a start-fn for an extension db service."
-  [{:keys [resource-dir output-path disabled-extensions]
+  ([]
+   (discover {}))
+  ([{:keys [resource-dir output-path disabled-extensions]
     :or {resource-dir "ext"
          output-path "target/"
          disabled-extensions #{}}}]
@@ -26,7 +28,7 @@
                                   [(:name ext) ext]) ext-list))
     :output-path output-path
     :extensions-disabled []
-    }))
+    })))
 
 (defn- write-service [state service-kw service-config]
   (write-target (name service-kw) service-config ))
