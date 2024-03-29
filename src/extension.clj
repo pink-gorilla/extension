@@ -34,7 +34,7 @@
       :output-path output-path
       :extensions-disabled []})))
 
-(defn- write-service [state service-kw service-config]
+(defn write-service [state service-kw service-config]
   (write-target (name service-kw) service-config))
 
 
@@ -49,6 +49,20 @@
         service-config (reduce reducer-fn start-value (map get-extension-key extensions))]
     (write-service state service-kw service-config)
     service-config))
+
+(defn- get-key-or-default [[key default] extension]
+  [key (or (get extension key) default)])
+
+(defn- get-extension-key-or-default [key-map extension]
+  (->> (map #(get-key-or-default % extension) key-map)
+       (into {})))
+
+
+(defn get-extensions [{:keys [output-path extensions] :as state} key-map]
+  (map #(get-extension-key-or-default key-map %) extensions))
+
+
+
 
 (defn get-deps-from-classpath []
   (let [deps

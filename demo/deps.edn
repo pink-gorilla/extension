@@ -1,0 +1,12 @@
+{:paths ["src"]
+ :deps
+ {org.clojure/clojure    {:mvn/version "1.11.1"}
+  org.pinkgorilla/extension {:local/root "../" :deps/manifest :deps}
+  org.pinkgorilla/ui-highcharts {:mvn/version "0.0.26"}
+  org.pinkgorilla/ui-vega {:mvn/version "0.0.31"}
+  }
+ :aliases
+ {:cljsbuild {:exec-fn demo.cljsbuild/demo}
+
+;
+  }}
