@@ -19,6 +19,10 @@
         (map (fn [ext]
                [(:name ext) ext]) ext-list)))
 
+(defn disabled? [disabled-extensions {:keys [name]}]
+  (contains? disabled-extensions name))
+
+
 (defn discover
   "Returns the discovered extensions for the purpose of using it in extension start. 
    Consider it a start-fn for an extension db service."
@@ -28,11 +32,14 @@
      :or {resource-dir "ext"
           output-path "target/"
           disabled-extensions #{}}}]
-   (let [ext-list (discover-resauce resource-dir)]
-     {:extensions ext-list
-      :extension-dict (extension-dict ext-list)
+   (let [ext-list (discover-resauce resource-dir)
+         active-extensions (remove #(disabled? disabled-extensions %) ext-list)
+         disabled-extensions (filter #(disabled? disabled-extensions %) ext-list)
+         ]
+     {:extensions active-extensions
+      :extension-dict (extension-dict active-extensions)
       :output-path output-path
-      :extensions-disabled []})))
+      :extensions-disabled disabled-extensions})))
 
 (defn write-service [state service-kw service-config]
   (write-target (name service-kw) service-config))
