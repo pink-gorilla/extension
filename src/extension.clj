@@ -2,7 +2,7 @@
   (:require
    [clojure.edn :as edn]
    [resauce.core :as rs]
-   [modular.writer :refer [write-status write-target]]))
+   [modular.writer :refer [write write-status write-target ensure-directory]]))
 
 (defn add-extension [ext-res-name]
   (->> ext-res-name
@@ -44,6 +44,11 @@
 (defn write-service [state service-kw service-config]
   (write-target (name service-kw) service-config))
 
+(defn write-target-webly [name data]
+  (ensure-directory "./target")
+  (ensure-directory "./target/webly")
+  (let [filename (str "./target/webly/" name ".edn")]
+    (write filename data)))
 
 (defn get-extensions-for
   "(get-extensions exts :cljs)
