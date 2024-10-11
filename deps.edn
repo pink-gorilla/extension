@@ -1,12 +1,9 @@
 {:paths ["src"]
  :deps
  {org.clojure/clojure    {:mvn/version "1.11.1"}
-  org.pinkgorilla/modular {:mvn/version "0.2.57"}}
+  org.pinkgorilla/modular {:mvn/version "0.2.60"}}
  :aliases
- {:outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
-             :main-opts ["-m" "antq.core"]}
-
-   ; github ci  
+ {; github ci  
   :build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}
                  slipset/deps-deploy {:mvn/version "0.2.1"}
                  babashka/fs {:mvn/version "0.0.5"}}
