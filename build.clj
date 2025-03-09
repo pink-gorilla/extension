@@ -1,6 +1,5 @@
 (ns build
   (:require
-   [babashka.fs :as fs]
    [clojure.tools.build.api :as b]
    [deps-deploy.deps-deploy :as dd]))
 
@@ -12,11 +11,6 @@
 
 (defn clean [_]
   (b/delete {:path "target"}))
-
-(defn- spit-version []
-  (spit (doto (fs/file "target/classes/META-INF/pink-gorilla/options/meta.edn")
-          (-> fs/parent fs/create-dirs)) {:module-name "options"
-                                          :version version}))
 
 (def pom-template
   [[:licenses
@@ -43,7 +37,6 @@
   (b/write-pom opts)
   (b/copy-dir {:src-dirs ["src" "resources"]
                :target-dir class-dir})
-  (spit-version)
   (b/jar {:class-dir class-dir
           :jar-file jar-file}))
 

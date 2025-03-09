@@ -4,11 +4,14 @@
    [resauce.core :as rs]
    [modular.writer :refer [write write-status write-target ensure-directory]]))
 
-(defn add-extension [ext-res-name]
-  (->> ext-res-name
-       slurp
-       edn/read-string
-       #_(ext-lazy-override goldly-config)))
+(defn add-extension [ext-res-name] 
+  (try 
+    (->> ext-res-name
+         slurp
+         edn/read-string)
+    (catch Exception ex
+      (throw (ex-info (str "extension" ext-res-name " has bad edn format") {:ext-name ext-res-name
+                                                                            :ex ex})))))
 
 (defn discover-resauce [resource-dir]
   (let [ext-res-names  (rs/resource-dir resource-dir)]
