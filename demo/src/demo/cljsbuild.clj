@@ -4,7 +4,7 @@
   )
 
 (defn demo [& _]
-  (let [exts (discover {:disabled-extensions #{"pinkie" "viz-pinkie"}})
+  (let [exts (discover {:disabled #{"pinkie" "viz-pinkie"}})
         build-exts (get-extensions exts {:name "unknown"
                                          :lazy? false
                                          :cljs-namespace []

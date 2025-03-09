@@ -31,13 +31,13 @@
    Consider it a start-fn for an extension db service."
   ([]
    (discover {}))
-  ([{:keys [resource-dir output-path disabled-extensions]
+  ([{:keys [resource-dir output-path disabled]
      :or {resource-dir "ext"
           output-path "target/"
-          disabled-extensions #{}}}]
+          disabled #{}}}]
    (let [ext-list (discover-resauce resource-dir)
-         active-extensions (remove #(disabled? disabled-extensions %) ext-list)
-         disabled-extensions (filter #(disabled? disabled-extensions %) ext-list)
+         active-extensions (remove #(disabled? disabled %) ext-list)
+         disabled-extensions (filter #(disabled? disabled %) ext-list)
          ]
      {:extensions active-extensions
       :extension-dict (extension-dict active-extensions)
