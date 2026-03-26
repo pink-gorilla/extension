@@ -22,8 +22,11 @@
         (map (fn [ext]
                [(:name ext) ext]) ext-list)))
 
-(defn disabled? [disabled-extensions {:keys [name]}]
-  (contains? disabled-extensions name))
+(defn disabled? [disabled-extensions extension]
+  (let [extension-name (or (:extension/name extension)
+                           (:name extension) ; old syntax
+                           )]
+  (contains? disabled-extensions name)))
 
 
 (defn discover
