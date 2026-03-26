@@ -2,10 +2,10 @@
   (:require
    [clojure.edn :as edn]
    [resauce.core :as rs]
-   [modular.writer :refer [write write-status write-target ensure-directory]]))
+   [modular.writer :refer [write write-status write-target ensure-directory write-edn-private]]))
 
-(defn add-extension [ext-res-name] 
-  (try 
+(defn add-extension [ext-res-name]
+  (try
     (->> ext-res-name
          slurp
          edn/read-string)
@@ -15,7 +15,7 @@
 
 (defn discover-resauce [resource-dir]
   (let [ext-res-names  (rs/resource-dir resource-dir)]
-     (map add-extension ext-res-names)))
+    (map add-extension ext-res-names)))
 
 (defn extension-dict [ext-list]
   (into {}
@@ -26,7 +26,7 @@
   (let [extension-name (or (:extension/name extension)
                            (:name extension) ; old syntax
                            )]
-  (contains? disabled-extensions extension-name)))
+    (contains? disabled-extensions extension-name)))
 
 
 (defn discover
@@ -39,9 +39,10 @@
           output-path "target/"
           disabled #{}}}]
    (let [ext-list (discover-resauce resource-dir)
-         active-extensions (remove #(disabled? disabled %) ext-list)
          disabled-extensions (filter #(disabled? disabled %) ext-list)
-         ]
+         active-extensions (remove #(disabled? disabled %) ext-list)]
+     (write-edn-private :extensions-all ext-list)
+     (write-edn-private :extensions-disabled disabled-extensions)
      {:extensions active-extensions
       :extension-dict (extension-dict active-extensions)
       :output-path output-path
