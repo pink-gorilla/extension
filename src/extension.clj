@@ -26,7 +26,7 @@
   (let [extension-name (or (:extension/name extension)
                            (:name extension) ; old syntax
                            )]
-  (contains? disabled-extensions name)))
+  (contains? disabled-extensions extension-name)))
 
 
 (defn discover
